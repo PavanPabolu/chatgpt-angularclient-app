@@ -1,10 +1,19 @@
 import { Component, ElementRef } from '@angular/core';
+/*The component imports Component and ElementRef from Angular's core library. 
+Component is used to define the component itself, while ElementRef allows direct 
+access to the DOM element associated with the component.*/
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+//The @Component decorator specifies the metadata for the component, including its selector, template URL, and styles.
+
+/*The AppComponent class contains properties for managing the chat interface, including the 
+title of the application, image paths for bot and user avatars, and references to the form 
+and container elements.*/
+
 export class AppComponent {
   title = 'chatGTPClient';
   loadinterval: any;
@@ -14,9 +23,14 @@ export class AppComponent {
   form:any;
   container:any;
 
+  //Lifecycle Hook
+  //The constructor injects ElementRef, allowing access to the component's DOM elements.
   constructor(private elementref: ElementRef) {    
   }
 
+  /*This lifecycle hook is called after the view is initialized. It sets up event listeners 
+  for form submission and keyup events (specifically looking for the Enter key). 
+  It also references the chat container element. */
   ngAfterViewInit(){
     this.form = this.elementref.nativeElement.querySelector('form');
     this.form.addEventListener('submit', this.handlesubmit);
@@ -28,6 +42,9 @@ export class AppComponent {
     this.container = this.elementref.nativeElement.querySelector('#container');
   }
 
+  //Helper Functions: 
+
+  //Loader Function: This function simulates a loading state by adding dots to the text content of an element at intervals.
   // handling three dots ; bot thinking
   loader(element: any){
     element.textContent = '';
@@ -39,7 +56,8 @@ export class AppComponent {
     }, 300)
   }
 
-  //to show one word typeing at a time by bot
+  //Type Text Function: This function simulates typing by incrementally adding characters of a given text to an HTML element.
+  //to show one word typing at a time by bot
   typetext(element:any, text:any){
     let index = 0;
 
@@ -54,6 +72,7 @@ export class AppComponent {
     }, 20)
   }
 
+  // Unique ID Generator: Generates a unique identifier using the current timestamp and a random number.
   generateUniqueId(){
     const timestamp = Date.now();
     const rnNumber = Math.random();
@@ -61,6 +80,7 @@ export class AppComponent {
     return `id-${timestamp}-${hex}`;
   }
 
+  //Stripes Function: Constructs HTML markup for chat messages, distinguishing between user and bot messages using different classes and avatars.
   //color variation of grey for bot and user
   stripes(ai: any, value:any, uniqueId: any){
     return(
@@ -77,6 +97,16 @@ export class AppComponent {
     )
   }
 
+  //Handle Submit Function:
+  /*
+  This asynchronous function handles form submissions:
+  * Prevents default form submission behavior.
+  * Retrieves user input.
+  * Displays user messages and a placeholder for bot responses.
+  * Calls a server endpoint to get a response based on user input.
+  * Displays the bot's response character by character.
+  * Handles errors gracefully by alerting the user.
+  */
   handlesubmit = async(e: any) => {
     e.preventDefault();
 
